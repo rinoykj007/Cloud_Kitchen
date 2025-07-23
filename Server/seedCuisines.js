@@ -1,0 +1,437 @@
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const Food = require("./models/Food");
+
+// Load environment variables
+dotenv.config();
+
+// Cuisine data to upload
+const cuisineData = [
+  {
+    name: "Mediterranean Platter",
+    type: "cuisine",
+    category: "Mediterranean",
+    categoryColor: "blue",
+    image:
+      "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.7,
+    reviews: 98,
+    difficulty: "Medium",
+    healthScore: 90,
+    cookTime: "15 minutes",
+    steps: 5,
+    nutrition: {
+      calories: 420,
+      carbs: 35,
+      proteins: 28,
+      fats: 18,
+    },
+  },
+  {
+    name: "Asian Fusion Bowl",
+    type: "cuisine",
+    category: "Asian",
+    categoryColor: "red",
+    image:
+      "https://images.unsplash.com/photo-1512003867696-6d5ce6835040?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.9,
+    reviews: 142,
+    difficulty: "Easy",
+    healthScore: 88,
+    cookTime: "12 minutes",
+    steps: 3,
+    nutrition: {
+      calories: 380,
+      carbs: 45,
+      proteins: 30,
+      fats: 10,
+    },
+  },
+  {
+    name: "Mexican Protein Bowl",
+    type: "cuisine",
+    category: "Mexican",
+    categoryColor: "green",
+    image:
+      "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.6,
+    reviews: 87,
+    difficulty: "Medium",
+    healthScore: 82,
+    cookTime: "18 minutes",
+    steps: 6,
+    nutrition: {
+      calories: 460,
+      carbs: 38,
+      proteins: 42,
+      fats: 15,
+    },
+  },
+  {
+    name: "Indian Curry with Basmati Rice",
+    type: "cuisine",
+    category: "Indian",
+    categoryColor: "orange",
+    image:
+      "https://images.unsplash.com/photo-1505253758473-96b7015fcd40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.8,
+    reviews: 112,
+    difficulty: "Medium",
+    healthScore: 78,
+    cookTime: "25 minutes",
+    steps: 7,
+    nutrition: {
+      calories: 480,
+      carbs: 52,
+      proteins: 25,
+      fats: 16,
+    },
+  },
+  {
+    name: "Japanese Bento Box",
+    type: "cuisine",
+    category: "Asian",
+    categoryColor: "pink",
+    image:
+      "https://images.unsplash.com/photo-1530649458430-1e82c04d9999?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.9,
+    reviews: 156,
+    difficulty: "Hard",
+    healthScore: 92,
+    cookTime: "30 minutes",
+    steps: 8,
+    nutrition: {
+      calories: 410,
+      carbs: 48,
+      proteins: 32,
+      fats: 12,
+    },
+  },
+  {
+    name: "Greek Salad with Grilled Chicken",
+    type: "cuisine",
+    category: "Mediterranean",
+    categoryColor: "cyan",
+    image:
+      "https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.5,
+    reviews: 78,
+    difficulty: "Easy",
+    healthScore: 95,
+    cookTime: "15 minutes",
+    steps: 4,
+    nutrition: {
+      calories: 350,
+      carbs: 15,
+      proteins: 38,
+      fats: 18,
+    },
+  },
+  {
+    name: "Thai Green Curry",
+    type: "cuisine",
+    category: "Asian",
+    categoryColor: "lime",
+    image:
+      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.7,
+    reviews: 103,
+    difficulty: "Medium",
+    healthScore: 80,
+    cookTime: "20 minutes",
+    steps: 6,
+    nutrition: {
+      calories: 430,
+      carbs: 32,
+      proteins: 28,
+      fats: 22,
+    },
+  },
+  {
+    name: "Italian Protein Pasta",
+    type: "cuisine",
+    category: "Italian",
+    categoryColor: "red",
+    image:
+      "https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.6,
+    reviews: 92,
+    difficulty: "Easy",
+    healthScore: 85,
+    cookTime: "15 minutes",
+    steps: 5,
+    nutrition: {
+      calories: 450,
+      carbs: 55,
+      proteins: 35,
+      fats: 10,
+    },
+  },
+  {
+    name: "Korean Bibimbap",
+    type: "cuisine",
+    category: "Asian",
+    categoryColor: "purple",
+    image:
+      "https://images.unsplash.com/photo-1553163147-622ab57be1c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.8,
+    reviews: 118,
+    difficulty: "Medium",
+    healthScore: 88,
+    cookTime: "22 minutes",
+    steps: 7,
+    nutrition: {
+      calories: 470,
+      carbs: 50,
+      proteins: 30,
+      fats: 15,
+    },
+  },
+  {
+    name: "Middle Eastern Falafel Plate",
+    type: "cuisine",
+    category: "Other",
+    categoryColor: "amber",
+    image:
+      "https://images.unsplash.com/photo-1593001872095-7d5b3868dd29?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.5,
+    reviews: 86,
+    difficulty: "Medium",
+    healthScore: 87,
+    cookTime: "25 minutes",
+    steps: 6,
+    nutrition: {
+      calories: 420,
+      carbs: 48,
+      proteins: 22,
+      fats: 16,
+    },
+  },
+  {
+    name: "Vietnamese Pho",
+    type: "cuisine",
+    category: "Asian",
+    categoryColor: "teal",
+    image:
+      "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.9,
+    reviews: 132,
+    difficulty: "Hard",
+    healthScore: 83,
+    cookTime: "35 minutes",
+    steps: 9,
+    nutrition: {
+      calories: 390,
+      carbs: 42,
+      proteins: 32,
+      fats: 10,
+    },
+  },
+  {
+    name: "Spanish Paella",
+    type: "cuisine",
+    category: "Other",
+    categoryColor: "yellow",
+    image:
+      "https://images.unsplash.com/photo-1534080564583-6be75777b70a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.7,
+    reviews: 95,
+    difficulty: "Hard",
+    healthScore: 80,
+    cookTime: "40 minutes",
+    steps: 10,
+    nutrition: {
+      calories: 520,
+      carbs: 58,
+      proteins: 28,
+      fats: 18,
+    },
+  },
+  {
+    name: "Moroccan Tagine",
+    type: "cuisine",
+    category: "Other",
+    categoryColor: "brown",
+    image:
+      "https://images.unsplash.com/photo-1541518763669-27fef04b14ea?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.6,
+    reviews: 88,
+    difficulty: "Medium",
+    healthScore: 82,
+    cookTime: "30 minutes",
+    steps: 8,
+    nutrition: {
+      calories: 440,
+      carbs: 45,
+      proteins: 26,
+      fats: 18,
+    },
+  },
+  {
+    name: "Brazilian Feijoada",
+    type: "cuisine",
+    category: "American",
+    categoryColor: "green",
+    image:
+      "https://images.unsplash.com/photo-1539136788836-5699e78bfc75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.5,
+    reviews: 75,
+    difficulty: "Hard",
+    healthScore: 75,
+    cookTime: "45 minutes",
+    steps: 9,
+    nutrition: {
+      calories: 550,
+      carbs: 48,
+      proteins: 35,
+      fats: 22,
+    },
+  },
+  {
+    name: "Caribbean Jerk Chicken",
+    type: "cuisine",
+    category: "American",
+    categoryColor: "orange",
+    image:
+      "https://images.unsplash.com/photo-1532636875304-0c89119d9b4d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.7,
+    reviews: 98,
+    difficulty: "Medium",
+    healthScore: 85,
+    cookTime: "25 minutes",
+    steps: 6,
+    nutrition: {
+      calories: 420,
+      carbs: 25,
+      proteins: 45,
+      fats: 15,
+    },
+  },
+  {
+    name: "Russian Borscht",
+    type: "cuisine",
+    category: "Other",
+    categoryColor: "deep-purple",
+    image:
+      "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.4,
+    reviews: 72,
+    difficulty: "Medium",
+    healthScore: 80,
+    cookTime: "35 minutes",
+    steps: 8,
+    nutrition: {
+      calories: 320,
+      carbs: 38,
+      proteins: 18,
+      fats: 12,
+    },
+  },
+  {
+    name: "French Ratatouille",
+    type: "cuisine",
+    category: "French",
+    categoryColor: "blue-grey",
+    image:
+      "https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.6,
+    reviews: 85,
+    difficulty: "Medium",
+    healthScore: 90,
+    cookTime: "30 minutes",
+    steps: 7,
+    nutrition: {
+      calories: 280,
+      carbs: 32,
+      proteins: 8,
+      fats: 14,
+    },
+  },
+  {
+    name: "Lebanese Mezze Platter",
+    type: "cuisine",
+    category: "Other",
+    categoryColor: "light-green",
+    image:
+      "https://images.unsplash.com/photo-1577906096429-f73c2c312435?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.8,
+    reviews: 110,
+    difficulty: "Medium",
+    healthScore: 88,
+    cookTime: "25 minutes",
+    steps: 6,
+    nutrition: {
+      calories: 450,
+      carbs: 42,
+      proteins: 22,
+      fats: 24,
+    },
+  },
+  {
+    name: "Ethiopian Injera with Wat",
+    type: "cuisine",
+    category: "Other",
+    categoryColor: "brown",
+    image:
+      "https://images.unsplash.com/photo-1567982047351-76b6f93e38ee?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.5,
+    reviews: 82,
+    difficulty: "Hard",
+    healthScore: 78,
+    cookTime: "40 minutes",
+    steps: 9,
+    nutrition: {
+      calories: 480,
+      carbs: 65,
+      proteins: 20,
+      fats: 15,
+    },
+  },
+  {
+    name: "Scandinavian Smørrebrød",
+    type: "cuisine",
+    category: "Other",
+    categoryColor: "light-blue",
+    image:
+      "https://images.unsplash.com/photo-1515942400420-2b98fed1f515?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1774&q=80",
+    rating: 4.7,
+    reviews: 90,
+    difficulty: "Medium",
+    healthScore: 86,
+    cookTime: "20 minutes",
+    steps: 5,
+    nutrition: {
+      calories: 380,
+      carbs: 30,
+      proteins: 25,
+      fats: 18,
+    },
+  },
+];
+
+// Connect to MongoDB and seed data
+const seedCuisines = async () => {
+  try {
+    // Connect to MongoDB
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("✅ Connected to MongoDB");
+
+    // Clear existing cuisine data
+    await Food.deleteMany({ type: "cuisine" });
+    console.log("🗑️ Cleared existing cuisine data");
+
+    // Insert new cuisine data
+    const result = await Food.insertMany(cuisineData);
+    console.log(`🎉 Successfully inserted ${result.length} cuisines`);
+
+    // Close connection
+    await mongoose.connection.close();
+    console.log("✅ Database connection closed");
+  } catch (error) {
+    console.error("❌ Error seeding cuisines:", error);
+    process.exit(1);
+  }
+};
+
+// Run the seeding script
+seedCuisines();
