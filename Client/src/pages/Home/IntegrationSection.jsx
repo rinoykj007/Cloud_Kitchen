@@ -4,7 +4,6 @@ const IntegrationSection = () => {
   return (
     <div className="max-w-7xl mx-auto py-8 md:py-10 px-4 md:px-10">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        {/* Integration */}
         <div className="bg-purple-900 p-8 rounded-3xl text-white">
           <h3 className="font-semibold text-2xl mb-6">
             Integration with Calendar & Nutrition Analysis
@@ -30,7 +29,6 @@ const IntegrationSection = () => {
           </div>
         </div>
 
-        {/* CTA */}
         <div className="flex flex-col justify-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">
             What you need we will provide

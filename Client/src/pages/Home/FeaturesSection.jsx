@@ -4,7 +4,6 @@ const FeaturesSection = () => {
   return (
     <div className="max-w-7xl mx-auto py-8 md:py-10 px-4 md:px-10">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Recipe Search */}
         <div className="bg-white p-8 rounded-3xl shadow-sm">
           <h3 className="font-semibold text-2xl mb-6">
             Recipe Search by Ingredient
@@ -18,7 +17,6 @@ const FeaturesSection = () => {
           </div>
         </div>
 
-        {/* Automatic Meal Plan */}
         <div className="bg-white p-8 rounded-3xl shadow-sm">
           <h3 className="font-semibold text-2xl mb-6">Automatic Meal Plan</h3>
           <div className="rounded-3xl overflow-hidden">

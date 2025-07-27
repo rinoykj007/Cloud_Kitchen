@@ -4,12 +4,9 @@ import Form from "./form";
 // API key for Google's Generative AI
 const API_KEY = "AIzaSyDNPWmnklzKc4GYxKCw6Quky-MJQOrAbXQ";
 
-// Function to format the meal plan response with better UI
 const formatMealPlanResponse = (response) => {
-  // Split the response into lines
   const lines = response.split("\n");
 
-  // Initialize variables to track sections
   let currentSection = null;
   let currentMeal = null;
   let inIngredients = false;
@@ -17,10 +14,8 @@ const formatMealPlanResponse = (response) => {
   let inNutrition = false;
   let inImportantNotes = false;
 
-  // Process the response
   return (
     <div className="space-y-6">
-      {/* Header section with date and plan type */}
       <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-xl border-l-4 border-purple-500">
         <h2 className="text-xl font-bold text-purple-900 mb-2">
           Personalized Meal Plan
@@ -32,7 +27,6 @@ const formatMealPlanResponse = (response) => {
         </p>
       </div>
 
-      {/* Important considerations section */}
       {lines.some((line) => line.includes("Important Considerations")) && (
         <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
           <h3 className="font-bold text-blue-800 mb-2 flex items-center">
@@ -64,12 +58,9 @@ const formatMealPlanResponse = (response) => {
         </div>
       )}
 
-      {/* Process each line */}
       {lines.map((line, index) => {
-        // Skip empty lines
         if (!line.trim()) return null;
 
-        // Main meal plan header
         if (line.includes("**Meal Plan") && line.includes("2025**")) {
           return (
             <div
@@ -83,7 +74,6 @@ const formatMealPlanResponse = (response) => {
           );
         }
 
-        // Meal headers (Meal 1, Meal 2, etc.)
         if (line.match(/\*\*Meal \d+: .* \(.*\) - ~\d+ Calories\*\*/)) {
           const mealInfo = line.replace(/\*\*/g, "").split(" - ");
           const mealTitle = mealInfo[0]; // "Meal 1: Breakfast (7:30 AM - 8:30 AM)"
@@ -114,7 +104,6 @@ const formatMealPlanResponse = (response) => {
           );
         }
 
-        // Dish name
         if (line.includes("**Dish:**")) {
           const dishName = line.replace("**Dish:**", "").trim();
           return (
@@ -126,7 +115,6 @@ const formatMealPlanResponse = (response) => {
           );
         }
 
-        // Ingredients section header
         if (line.includes("**Ingredients:**")) {
           inIngredients = true;
           inInstructions = false;
@@ -153,7 +141,6 @@ const formatMealPlanResponse = (response) => {
           );
         }
 
-        // Instructions section header
         if (line.includes("**Instructions:**")) {
           inIngredients = false;
           inInstructions = true;
@@ -180,7 +167,6 @@ const formatMealPlanResponse = (response) => {
           );
         }
 
-        // Nutrition facts section header
         if (line.includes("**Nutrition Facts")) {
           inIngredients = false;
           inInstructions = false;
@@ -207,7 +193,6 @@ const formatMealPlanResponse = (response) => {
           );
         }
 
-        // Daily totals section
         if (line.includes("**Daily Totals")) {
           return (
             <div
@@ -248,7 +233,6 @@ const formatMealPlanResponse = (response) => {
           );
         }
 
-        // Nutrition values in the Daily Totals section
         if (
           line.includes("**Calories:**") ||
           line.includes("**Protein:**") ||

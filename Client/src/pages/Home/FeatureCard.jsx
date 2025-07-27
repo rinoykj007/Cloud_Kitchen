@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { useHorizontalScroll } from "../../utils/scrollUtils"; // Custom hook for horizontal scrolling
+import { useHorizontalScroll } from "../../utils/scrollUtils";
 
-// Card component to display individual cards
 const Card = ({ title, content, image, color }) => {
   return (
     <div className="card">
@@ -71,25 +70,22 @@ const cardData = [
   },
 ];
 
-// Main FeatureCard component with horizontal scrolling - using a simpler approach
 const FeatureCard = ({ cards = cardData, style }) => {
   const containerRef = useRef(null);
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    // Use the shared horizontal scroll utility with modified parameters to fix empty space
     const cleanup = useHorizontalScroll({
       containerRef,
       scrollRef,
       triggerId: "feature-card-scroll",
       dependencies: [cards],
-      // Add these extra parameters to fix the empty space issue
-      extraOffset: 300, // Add a negative offset to reduce empty space
-      endThreshold: 0.8, // Trigger end correction earlier
-      endCorrection: 200, // Apply stronger correction at the end
+
+      extraOffset: 300,
+      endThreshold: 0.8,
+      endCorrection: 200,
     });
 
-    // Clean up on component unmount
     return cleanup;
   }, [cards]);
 
@@ -105,7 +101,6 @@ const FeatureCard = ({ cards = cardData, style }) => {
         alignItems: "center",
       }}
     >
-      {/* Keep the heading inside the container that has the scroll trigger */}
       <div
         ref={containerRef}
         className="feature-card-container"
@@ -115,7 +110,6 @@ const FeatureCard = ({ cards = cardData, style }) => {
           Explore Our Diet Plans
         </h2>
 
-        {/* Scrolling container */}
         <div className="horizontal-scroll-container">
           <div ref={scrollRef} className="horizontal-scroll-content">
             {cards.map((card) => (

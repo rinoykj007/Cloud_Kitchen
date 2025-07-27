@@ -18,7 +18,7 @@ const SpecialCuisine = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:5000/api/foods/cuisines"
+        "https://cloud-kitchen-2-c7ig.onrender.com/api/foods/cuisines"
       );
       setAllCuisines(response.data.data);
     } catch (error) {

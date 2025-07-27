@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 
-// Admin Components
 import AdminHeader from "../../components/admin/AdminHeader";
 import StatsCards from "../../components/admin/StatsCards";
 import AddButton from "../../components/admin/AddButton";
@@ -31,21 +30,23 @@ export default function Admin() {
     fats: 0,
   });
 
-  // Fetch foods from backend
   const fetchFoods = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("authToken");
-      const response = await axios.get("http://localhost:5000/api/foods", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "https://cloud-kitchen-2-c7ig.onrender.com/api/foods",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setFoods(response.data.data);
     } catch (error) {
       console.error("Error fetching foods:", error);
       if (error.response?.status === 401) {
-        logout(); // Auto logout if token is invalid
+        logout();
       }
     } finally {
       setLoading(false);
@@ -56,24 +57,21 @@ export default function Admin() {
     fetchFoods();
   }, []);
 
-  // Simple function to update form data when user types
   const handleInputChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    // Update the form data
     setFormData({
       ...formData,
       [name]: value,
     });
   };
 
-  // Create new food
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-      // Prepare data in the format backend expects
+
       const foodData = {
         ...formData,
         nutrition: {
@@ -84,11 +82,15 @@ export default function Admin() {
         },
       };
 
-      await axios.post("http://localhost:5000/api/foods", foodData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        "https://cloud-kitchen-2-c7ig.onrender.com/api/foods",
+        foodData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       fetchFoods();
       setShowModal(false);
       resetForm();
@@ -100,12 +102,11 @@ export default function Admin() {
     }
   };
 
-  // Update existing food
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-      // Prepare data in the format backend expects
+
       const foodData = {
         ...formData,
         nutrition: {
@@ -117,7 +118,7 @@ export default function Admin() {
       };
 
       await axios.put(
-        `http://localhost:5000/api/foods/${editingFood}`,
+        `https://cloud-kitchen-2-c7ig.onrender.com/api/foods/${editingFood}`,
         foodData,
         {
           headers: {
@@ -145,11 +146,14 @@ export default function Admin() {
     if (window.confirm("Are you sure you want to delete this food item?")) {
       try {
         const token = localStorage.getItem("authToken");
-        await axios.delete(`http://localhost:5000/api/foods/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.delete(
+          `https://cloud-kitchen-2-c7ig.onrender.com/api/foods/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         fetchFoods();
       } catch (error) {
         console.error("Error deleting food:", error);

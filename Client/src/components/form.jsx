@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 export default function Form({ onSubmit, onCancel }) {
-  // Form state
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );

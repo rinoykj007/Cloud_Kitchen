@@ -9,7 +9,6 @@ export default function FloatingChatButton() {
     setIsOpen(!isOpen);
   };
 
-  // Define the fadeIn animation style
   const fadeInStyle = `
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }

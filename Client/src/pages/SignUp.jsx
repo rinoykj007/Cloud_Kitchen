@@ -46,7 +46,7 @@ function SignUp() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/users/register",
+        "https://cloud-kitchen-2-c7ig.onrender.com/api/users/register",
         {
           name: formData.name,
           email: formData.email,
