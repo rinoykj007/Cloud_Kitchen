@@ -15,7 +15,11 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000"], // React dev server
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://cloud-kitchen-5gj9.vercel.app",
+    ],
     credentials: true,
   })
 );
